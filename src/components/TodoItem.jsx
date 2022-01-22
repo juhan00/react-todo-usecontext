@@ -2,43 +2,7 @@ import React, { useContext } from "react";
 import { TodoFrameContext } from "./TodoFrame";
 
 export const TodoItem = ({ todo, index }) => {
-  const { todos, setTodos } = useContext(TodoFrameContext);
-
-  const editTodo = (event, id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, text: event.target.value } : todo
-      )
-    );
-  };
-
-  const changeState = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, state: !todo.state } : todo
-      )
-    );
-  };
-
-  const changeEditState = (id) => {
-    const editInputText = todos
-      .filter((todo) => todo.id === id)
-      .map((todo) => todo.text)
-      .toString();
-    if (editInputText !== "") {
-      setTodos(
-        todos.map((todo) =>
-          todo.id === id ? { ...todo, editState: !todo.editState } : todo
-        )
-      );
-    } else {
-      alert("내용을 입력 해주세요.");
-    }
-  };
-
-  const deleteState = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
+  const { dispatch } = useContext(TodoFrameContext);
 
   return (
     <li>
@@ -46,7 +10,7 @@ export const TodoItem = ({ todo, index }) => {
         type="checkbox"
         checked={todo.state ? true : false}
         onChange={() => {
-          changeState(todo.id);
+          dispatch({ type: "CHANGE_TODO_STATE", id: todo.id });
         }}
       />
       <span className="list">
@@ -58,7 +22,7 @@ export const TodoItem = ({ todo, index }) => {
             type="text"
             value={todo.text}
             onChange={(event) => {
-              editTodo(event, todo.id);
+              dispatch({ type: "EDIT_TODO", event, id: todo.id });
             }}
           />
         )}
@@ -68,7 +32,7 @@ export const TodoItem = ({ todo, index }) => {
           <a
             href="#none"
             onClick={() => {
-              changeEditState(todo.id);
+              dispatch({ type: "CHANGE_EDIT_STATE", id: todo.id });
             }}
           >
             수정
@@ -76,7 +40,7 @@ export const TodoItem = ({ todo, index }) => {
           <a
             href="#none"
             onClick={() => {
-              deleteState(todo.id);
+              dispatch({ type: "DELETE_STATE", id: todo.id });
             }}
           >
             삭제
@@ -87,7 +51,7 @@ export const TodoItem = ({ todo, index }) => {
           <a
             href="#none"
             onClick={() => {
-              changeEditState(todo.id);
+              dispatch({ type: "CHANGE_EDIT_STATE", id: todo.id });
             }}
           >
             저장

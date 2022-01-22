@@ -3,12 +3,12 @@ import { TodoItem } from "./TodoItem";
 import { TodoFrameContext } from "./TodoFrame";
 
 export const TodoList = () => {
-  const { todos } = useContext(TodoFrameContext);
+  const { state } = useContext(TodoFrameContext);
 
   return (
     <ul>
-      {todos !== "" &&
-        todos.map((todo, index) => (
+      {state.todos !== "" &&
+        state.todos.map((todo, index) => (
           <TodoItem key={todo.id} todo={todo} index={index} />
         ))}
     </ul>
